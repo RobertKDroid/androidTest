@@ -1,6 +1,8 @@
 package com.example.stacjonarny.testapp;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,19 +18,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
-
-import com.squareup.picasso.Picasso;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG="MAINACTIVITY";
@@ -39,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private ListView mDrawerList;
 
-    private String drawerAdapter[] = {"Videos","Articles","Login","Logout"};
+    private String drawerAdapterItems[] = {"Gallery","Videos","Articles","Login","Logout"};
     private String webUrl = "https://www.joemonster.org";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +44,20 @@ public class MainActivity extends AppCompatActivity {
 
 
 //LOAD DATA has to be in async task because of being in main thread
-        Elements elements = null;
-        Document doc = null;
-        try {
-            doc = new AsyncTaskGetArticles(doc).execute("http://joemonster.org/art/37436/").get();
-//            elements = doc.select("a[href~=\\/art\\/[0-9]+\\/]");
-            elements = doc.select(".art-wrapper > h1");
-            String title = Jsoup.parse(doc.select(".art-wrapper > h1"))
-            System.out.println(elements);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+//        trying to parse data from web ! USELESS
+//        Elements elements = null;
+//        Document doc = null;
+//        try {
+//            doc = new AsyncTaskGetArticles(doc).execute("http://joemonster.org/art/37436/").get();
+////            elements = doc.select("a[href~=\\/art\\/[0-9]+\\/]");
+//            elements = doc.select(".art-wrapper > h1");
+//            String title = Jsoup.parse(elements.html()).toString();
+//            System.out.println("title of the page = "+title);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
 
 
         mDrawer =(DrawerLayout) findViewById(R.id.drawer_layout);
@@ -80,10 +75,12 @@ public class MainActivity extends AppCompatActivity {
         mNavHeaderImage.setLayoutParams(new AbsListView.LayoutParams(x,y));
 
         mDrawerList.addHeaderView(mNavHeaderImage);
-        mDrawerList.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,drawerAdapter));
+        ArrayAdapter drawerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,drawerAdapterItems);
+        mDrawerList.setAdapter(drawerAdapter);
+        setDrawerOnItemClickListener(mDrawerList,this);
 
-        mGridViewVideos = (GridView) findViewById(R.id.main_grid_videos);
-        mGridViewVideos.setAdapter(new VideoGridAdapter(this));
+//        mGridViewVideos = (GridView) findViewById(R.id.main_grid_videos);
+//        mGridViewVideos.setAdapter(new VideoGridAdapter(this));
 
         mRecyclerViewArticles = (RecyclerView) findViewById(R.id.main_list_articles);
         mRecyclerViewArticles.setHasFixedSize(true); //more perf if size not changing dynamically
@@ -112,6 +109,27 @@ public class MainActivity extends AppCompatActivity {
 //                R.array.items, android.R.layout.simple_spinner_item);
 //
 //        spinner.setAdapter(adapter);
+    }
+
+    private static void setDrawerOnItemClickListener(ListView list, final Activity a){
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = null;
+
+                switch(position){
+                    case 1:
+                        i=new Intent(a.getApplicationContext(),VideoGalleryActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        a.startActivity(i);
+                        break;
+                    default:
+                        Log.d(TAG, "DEFAULT NO ACTION DESIGNED");
+
+                }
+            }
+        });
     }
 
     public static int convertDptoPX(Context c, float dp){
