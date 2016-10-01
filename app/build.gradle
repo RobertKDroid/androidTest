@@ -29,7 +29,7 @@ dependencies {
 //additonal components
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.jsoup:jsoup:1.9.2'
-
+    compile 'com.google.code.gson:gson:2.7'
 
     testCompile 'junit:junit:4.12'
 }

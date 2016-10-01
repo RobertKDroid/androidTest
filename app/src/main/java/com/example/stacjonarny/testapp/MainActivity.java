@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private ListView mDrawerList;
 
-    private String drawerAdapterItems[] = {"Gallery","Videos","Articles","Login","Logout"};
+    private String drawerAdapterItems[] = {"Gallery","Weather","Articles","Login","Logout"};
     private String webUrl = "https://www.joemonster.org";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawer =(DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
 
         ImageView mNavHeaderImage = new ImageView(this);
         mNavHeaderImage.setImageResource(R.drawable.dixi_1);
@@ -124,6 +125,10 @@ public class MainActivity extends AppCompatActivity {
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         a.startActivity(i);
                         break;
+                    case 2:
+                        i = new Intent(a.getApplicationContext(),WeatherActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        a.startActivity(i);
                     default:
                         Log.d(TAG, "DEFAULT NO ACTION DESIGNED");
 
