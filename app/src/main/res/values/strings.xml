@@ -3,4 +3,10 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_video_details">VideoDetailsActivity</string>
     <string name="title_activity_weather">WeatherActivity</string>
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Humidity</string>
+    <string name="windSpeedAndDirection">Wind speed and direction</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+    <string name="atmospherePressure">Atmosphere pressure</string>
 </resources>
