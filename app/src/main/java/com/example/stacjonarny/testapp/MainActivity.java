@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerViewArticles;
     private GridView mGridViewVideos;
     private RecyclerView.LayoutManager mRVLayoutManager;
-    private DrawerLayout mDrawer;
+    private static DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
 
     private String drawerAdapterItems[] = {"Gallery","Weather","Articles","Login","Logout"};
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
 
-        mDrawer =(DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout =(DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
 
@@ -73,12 +74,8 @@ public class MainActivity extends AppCompatActivity {
         int y = convertDptoPX(this,60);
 
 //        mNavHeaderImage.setLayoutParams(new ViewGroup.LayoutParams(x,y));//CHUJOSTWO NIE DZIALA
-        mNavHeaderImage.setLayoutParams(new AbsListView.LayoutParams(x,y));
 
-        mDrawerList.addHeaderView(mNavHeaderImage);
-        ArrayAdapter drawerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,drawerAdapterItems);
-        mDrawerList.setAdapter(drawerAdapter);
-        setDrawerOnItemClickListener(mDrawerList,this);
+        createDrawerWithHeaderImage(mNavHeaderImage, x, y);
 
 //        mGridViewVideos = (GridView) findViewById(R.id.main_grid_videos);
 //        mGridViewVideos.setAdapter(new VideoGridAdapter(this));
@@ -112,6 +109,14 @@ public class MainActivity extends AppCompatActivity {
 //        spinner.setAdapter(adapter);
     }
 
+    private void createDrawerWithHeaderImage(ImageView mNavHeaderImage, int x, int y) {
+        mNavHeaderImage.setLayoutParams(new AbsListView.LayoutParams(x,y));
+        mDrawerList.addHeaderView(mNavHeaderImage);
+        ArrayAdapter drawerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,drawerAdapterItems);
+        mDrawerList.setAdapter(drawerAdapter);
+        setDrawerOnItemClickListener(mDrawerList,this);
+    }
+
     private static void setDrawerOnItemClickListener(ListView list, final Activity a){
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -121,13 +126,13 @@ public class MainActivity extends AppCompatActivity {
 
                 switch(position){
                     case 1:
-                        i=new Intent(a.getApplicationContext(),VideoGalleryActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mDrawerLayout.closeDrawers();
+                        i=makeActivityIntent(a.getApplicationContext(),VideoGalleryActivity.class);
                         a.startActivity(i);
                         break;
                     case 2:
-                        i = new Intent(a.getApplicationContext(),WeatherActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mDrawerLayout.closeDrawers();
+                        i=makeActivityIntent(a.getApplicationContext(),WeatherActivity.class);
                         a.startActivity(i);
                     default:
                         Log.d(TAG, "DEFAULT NO ACTION DESIGNED");
@@ -136,22 +141,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    public static int convertDptoPX(Context c, float dp){
+    private static Intent makeActivityIntent(Context c, Class activityClass){
+        Intent i = new Intent(c,activityClass);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return i;
+    }
+    private int convertDptoPX(Context c, float dp){
         Resources r = c.getResources();
         dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dp,r.getDisplayMetrics());
 
 
         return Math.round(dp);
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

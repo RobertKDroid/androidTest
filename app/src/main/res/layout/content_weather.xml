@@ -36,11 +36,18 @@
             android:id="@+id/edittext_country"
             android:layout_height="match_parent" />
     </LinearLayout>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:paddingLeft="20dp"
+        android:text="--- ---"
+        android:layout_below="@id/linear_layout_editables"
+        android:id="@+id/textview_actual_city"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_below="@id/linear_layout_editables"
+        android:layout_below="@id/textview_actual_city"
         android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,7 +74,7 @@
                     android:id="@+id/textview_weather_temperature"
                     android:paddingLeft="5dp"
                     android:textSize="20dp"
-                    android:text="tesasdasdasdasdasdasdt"
+                    android:text="---"
                     android:gravity="center_vertical"
                     android:layout_height="match_parent" />
             </RelativeLayout>
@@ -100,7 +107,7 @@
                     android:id="@+id/textview_weather_sunrise"
                     android:paddingLeft="5dp"
                     android:textSize="20dp"
-                    android:text="tesasdasdasdasdasdasdt"
+                    android:text="---"
                     android:gravity="center_vertical"
                     android:layout_height="match_parent" />
             </RelativeLayout>
@@ -132,7 +139,7 @@
                     android:id="@+id/textview_weather_sunset"
                     android:paddingLeft="5dp"
                     android:textSize="20dp"
-                    android:text="tesasdasdasdasdasdasdt"
+                    android:text="---"
                     android:gravity="center_vertical"
                     android:layout_height="match_parent" />
             </RelativeLayout>
@@ -163,7 +170,7 @@
                     android:id="@+id/textview_weather_wind_speed_direction"
                     android:paddingLeft="5dp"
                     android:textSize="20dp"
-                    android:text="tesasdasdasdasdasdasdt"
+                    android:text="---"
                     android:gravity="center_vertical"
                     android:layout_height="match_parent" />
             </RelativeLayout>
@@ -198,7 +205,7 @@
                     android:id="@+id/textview_weather_humidity"
                     android:paddingLeft="5dp"
                     android:textSize="20dp"
-                    android:text="tesasdasdasdasdasdasdt"
+                    android:text="---"
                     android:gravity="center_vertical"
                     android:layout_height="match_parent" />
             </RelativeLayout>
@@ -230,7 +237,7 @@
                     android:id="@+id/textview_weather_pressure"
                     android:paddingLeft="5dp"
                     android:textSize="20dp"
-                    android:text="tesasdasdasdasdasdasdt"
+                    android:text="---"
                     android:gravity="center_vertical"
                     android:layout_height="match_parent" />
             </RelativeLayout>
