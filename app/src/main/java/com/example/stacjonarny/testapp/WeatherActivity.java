@@ -49,17 +49,16 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
-        dl = (DrawerLayout)findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        dl = (DrawerLayout)findViewById(R.id.drawer_layout);
 
-        setupView();
+
         ImageView mNavHeaderImage = new ImageView(this);
         mNavHeaderImage.setImageResource(R.drawable.dixi_1);
         mNavHeaderImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
+        setupView();
         createDrawerWithHeaderImage(mNavHeaderImage,240,60);
-        loadWeatherData(w, mEditTextCity.getText().toString(), mEditTextCountry.getText().toString());
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -71,13 +70,13 @@ public class WeatherActivity extends AppCompatActivity {
                 loadWeatherData(w, mEditTextCity.getText().toString(), mEditTextCountry.getText().toString());
             }
         });
+      //  loadWeatherData(w, mEditTextCity.getText().toString(), mEditTextCountry.getText().toString());
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        dl.closeDrawers();
     }
 
     @Override
