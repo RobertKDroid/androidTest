@@ -9,6 +9,8 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,14 +24,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.stacjonarny.testapp.Services.Weather;
 import com.example.stacjonarny.testapp.Services.WeatherData;
-import com.google.gson.Gson;
+import com.example.stacjonarny.testapp.Services.WeatherForecast;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.concurrent.ExecutionException;
 
 public class WeatherActivity extends AppCompatActivity {
@@ -39,9 +44,12 @@ public class WeatherActivity extends AppCompatActivity {
             mTextViewSunset, mTextViewWind,
             mTextViewHumidity, mTextViewPressure,mTextViewCityCountry;
     ListView mDrawerList;
+    LinearLayout mLinearLayoutForecasts;
+    ArrayList<ForecastFragment> forecasts;
     DrawerLayout mDrawerLayout;
     static DrawerLayout dl;
     private String drawerAdapterItems[] = {"Gallery","Articles","Login","Logout"};
+
 
     final WeatherData w = null;
 
@@ -49,9 +57,11 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
+        forecasts = new ArrayList<>();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         dl = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mLinearLayoutForecasts = (LinearLayout) findViewById(R.id.linearlayout_forecasts);
 
 
         ImageView mNavHeaderImage = new ImageView(this);
@@ -70,13 +80,13 @@ public class WeatherActivity extends AppCompatActivity {
                 loadWeatherData(w, mEditTextCity.getText().toString(), mEditTextCountry.getText().toString());
             }
         });
-      //  loadWeatherData(w, mEditTextCity.getText().toString(), mEditTextCountry.getText().toString());
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        loadWeatherData(w, mEditTextCity.getText().toString(), mEditTextCountry.getText().toString());
     }
 
     @Override
@@ -154,23 +164,59 @@ public class WeatherActivity extends AppCompatActivity {
         mTextViewTemperature = (TextView) findViewById(R.id.textview_weather_temperature);
         mTextViewWind = (TextView) findViewById(R.id.textview_weather_wind_speed_direction);
     }
+
     private void loadWeatherData(WeatherData w, String city, String country) {
-
-        try {
-            if(isOnline()) {
+        if(isOnline()) {
+            try {
                 w = new AsyncTaskGetWeather().execute(city, country).get();
-                setupDataIntoView(w);
-
-                Log.d(TAG, "onCreate: WEATHER GOT");
-            }else {
-                Toast.makeText(this, "Check net Connection", Toast.LENGTH_SHORT).show();
+                Collections.sort(w.getForecast(), new Comparator<WeatherForecast>() {
+                    @Override
+                    public int compare(WeatherForecast o1, WeatherForecast o2) {
+                        return o1.getDate().compareTo(o2.getDate());
+                    }
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }finally {
+                if(w!=null) {
+                    setupDataIntoView(w);
+                    setupForecastFragments(w);
+                }
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        }else {
+            Toast.makeText(this, "Check net Connection", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void setupForecastFragments(WeatherData w){
+        FragmentManager fm = getSupportFragmentManager();
+        if(!forecasts.isEmpty()){
+            FragmentTransaction ft = fm.beginTransaction();
+            for(ForecastFragment f:forecasts){
+                ft.remove(f);
+            }
+            ft.commit();
+            forecasts.clear();
+        }
+        FragmentTransaction ft = fm.beginTransaction();
+        for(int i=0;i<7;i++){
+            WeatherForecast wf = w.getForecast().get(i);
+            ForecastFragment f = new ForecastFragment();
+            Bundle b = new Bundle();
+            b.putString("date", wf.getDate());
+            b.putString("day", wf.getDay());
+            b.putString("state", wf.getState());
+            f.setArguments(b);
+            forecasts.add(f);
+            ft.add(mLinearLayoutForecasts.getId(),f,"forecast");
+            b=null;
+            f=null;
+            wf=null;
+        }
+        ft.commit();
     }
     private boolean isOnline(){
         ConnectivityManager cm = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
@@ -185,6 +231,7 @@ public class WeatherActivity extends AppCompatActivity {
         mTextViewSunrise.setText(w.getSunrise());
         mTextViewSunset.setText(w.getSunset());
         mTextViewTemperature.setText(w.getTemperature() + " °C");
+
     }
 
 }

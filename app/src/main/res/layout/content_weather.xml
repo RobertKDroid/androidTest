@@ -44,11 +44,13 @@
         android:text="--- ---"
         android:layout_below="@id/linear_layout_editables"
         android:id="@+id/textview_actual_city"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_below="@id/textview_actual_city"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textview_actual_city"
+        android:layout_alignParentStart="true">
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
@@ -242,11 +244,27 @@
                     android:layout_height="match_parent" />
             </RelativeLayout>
         </LinearLayout>
+
+
+        <HorizontalScrollView
+            android:paddingTop="5dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:scrollbars="none"
+            android:id="@+id/horizontalscroll_forecast"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/linearlayout_forecasts"
+                android:layout_height="wrap_content">
+
+            </LinearLayout>
+
+
+
+        </HorizontalScrollView>
     </LinearLayout>
-
-
-
-
 
 
 </RelativeLayout>

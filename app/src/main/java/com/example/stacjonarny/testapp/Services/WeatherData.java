@@ -1,5 +1,7 @@
 package com.example.stacjonarny.testapp.Services;
 
+import java.util.ArrayList;
+
 /**
  * Created by Stacjonarny on 2016-10-01.
  */
@@ -8,6 +10,15 @@ public class WeatherData {
     private String region, city, sunset, sunrise;
     private float windSpeed, windDirection, windChill,temperature,
             atmospherePressure, atmosphereVisibility, atmosphereRising, atmosphereHumidity;
+    ArrayList<WeatherForecast> forecast = new ArrayList<WeatherForecast>();
+
+    public ArrayList<WeatherForecast> getForecast() {
+        return forecast;
+    }
+
+    public void setForecast(ArrayList<WeatherForecast> forecast) {
+        this.forecast = forecast;
+    }
 
     public float getTemperature() {
         return temperature;

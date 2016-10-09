@@ -73,7 +73,7 @@ public class Weather {
     public WeatherData getTodayWeather() {
         WeatherData data = new WeatherData();
         JSONArray todayForecast = new JSONArray();
-
+        JSONArray futureForecast = new JSONArray();
         try{
             todayForecast.put(getForecastByKey(this.forecastData,"location"));
             todayForecast.put(getForecastByKey(this.forecastData,"wind"));
@@ -93,11 +93,23 @@ public class Weather {
             data.setSunset(todayForecast.getJSONObject(3).getString("sunset"));
             data.setTemperature(todayForecast.getJSONObject(4).getLong("temp"));
 
-            JSONArray futureForecast = this.forecastData.getJSONObject("query")
+            futureForecast = this.forecastData.getJSONObject("query")
                     .getJSONObject("results")
                     .getJSONObject("channel")
                     .getJSONObject("item")
                     .getJSONArray("forecast");
+
+
+            for(int i=0;i<7;i++){
+                WeatherForecast wf = new WeatherForecast();
+                JSONObject o = futureForecast.getJSONObject(i);
+                wf.setState(o.getString("text"));
+                wf.setDate(o.getString("date"));
+                wf.setDay(o.getString("day"));
+                data.getForecast().add(wf);
+                o=null;
+                wf = null;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
