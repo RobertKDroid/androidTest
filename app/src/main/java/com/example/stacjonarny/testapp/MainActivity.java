@@ -1,6 +1,9 @@
 package com.example.stacjonarny.testapp;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private static DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
 
-    private String drawerAdapterItems[] = {"Gallery","Weather","Articles","Login","Logout"};
+    private String drawerAdapterItems[] = {"Gallery","Weather","Articles","Notify","Logout"};
     private String webUrl = "https://www.joemonster.org";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +137,27 @@ public class MainActivity extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
                         i=makeActivityIntent(a.getApplicationContext(),WeatherActivity.class);
                         a.startActivity(i);
+                        break;
+                    case 3:
+                        mDrawerLayout.closeDrawers();
+                        i=makeActivityIntent(a.getApplicationContext(),ScrollingActivity.class);
+                        a.startActivity(i);
+                        break;
+                    case 4:
+                        i = new Intent(a.getApplicationContext(), VideoDetailsActivity.class);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(a.getApplicationContext(),(int)System.currentTimeMillis(),i,0);
+
+                        Notification n = new Notification.Builder(a.getApplicationContext())
+                                .setContentTitle("New thing")
+                                .setContentText("This is some content")
+                                .setAutoCancel(true)
+                                .addAction(R.drawable.dixi_1,"Click",pendingIntent)
+                                .setContentIntent(pendingIntent).build();
+
+                        NotificationManager notificationManager = (NotificationManager) a.getSystemService(NOTIFICATION_SERVICE);
+
+                        notificationManager.notify(0,n);
+                        break;
                     default:
                         Log.d(TAG, "DEFAULT NO ACTION DESIGNED");
 

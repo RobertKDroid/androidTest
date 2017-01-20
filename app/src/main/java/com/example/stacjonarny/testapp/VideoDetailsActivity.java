@@ -1,13 +1,19 @@
 package com.example.stacjonarny.testapp;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -17,6 +23,7 @@ public class VideoDetailsActivity extends AppCompatActivity {
     private MediaController mMediaController;
     TextView mTextViewDescription;
     VideoView mVideo;
+    Button mNotifyButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,13 +45,43 @@ public class VideoDetailsActivity extends AppCompatActivity {
         mVideo.setVideoURI(uri);
         mVideo.requestFocus();
         mVideo.start();
+        mNotifyButton=(Button)findViewById(R.id.notifyButton);
+
+
+
+        mNotifyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), VideoDetailsActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),(int)System.currentTimeMillis(),i,0);
+
+                Notification n = new Notification.Builder(getApplicationContext())
+                        .setContentTitle("New thing")
+                        .setSmallIcon(R.drawable.eye)
+                        .setContentText("This is some content")
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent).build();
+
+                NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+                notificationManager.notify(0,n);
+            }
+        });
+
+
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Notification made", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+
+
+
             }
         });
     }
