@@ -1,4 +1,4 @@
-package com.example.stacjonarny.testapp;
+package com.example.stacjonarny.testapp.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.stacjonarny.testapp.R;
 import com.example.stacjonarny.testapp.Services.WeatherForecast;
 
 /**

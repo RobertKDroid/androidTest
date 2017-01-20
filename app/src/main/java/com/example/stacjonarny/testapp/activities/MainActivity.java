@@ -1,4 +1,4 @@
-package com.example.stacjonarny.testapp;
+package com.example.stacjonarny.testapp.activities;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -27,6 +27,15 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.example.stacjonarny.testapp.R;
+import com.example.stacjonarny.testapp.adapters.RecyclerViewArticlesAdapter;
+import com.example.stacjonarny.testapp.model.TestSingleton;
+
+import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.EBean;
+
+@EActivity
 public class MainActivity extends AppCompatActivity {
     private final static String TAG="MAINACTIVITY";
 
@@ -35,9 +44,11 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mRVLayoutManager;
     private static DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-
     private String drawerAdapterItems[] = {"Gallery","Weather","Articles","Notify","Logout"};
-    private String webUrl = "https://www.joemonster.org";
+    @Bean
+    TestSingleton testSingleton;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,23 +56,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-//LOAD DATA has to be in async task because of being in main thread
-//        trying to parse data from web ! USELESS
-//        Elements elements = null;
-//        Document doc = null;
-//        try {
-//            doc = new AsyncTaskGetArticles(doc).execute("http://joemonster.org/art/37436/").get();
-////            elements = doc.select("a[href~=\\/art\\/[0-9]+\\/]");
-//            elements = doc.select(".art-wrapper > h1");
-//            String title = Jsoup.parse(elements.html()).toString();
-//            System.out.println("title of the page = "+title);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
+        testSingleton.setAsd(12);
 
 
         mDrawerLayout =(DrawerLayout) findViewById(R.id.drawer_layout);
@@ -76,12 +71,9 @@ public class MainActivity extends AppCompatActivity {
         int x = convertDptoPX(this,240);
         int y = convertDptoPX(this,60);
 
-//        mNavHeaderImage.setLayoutParams(new ViewGroup.LayoutParams(x,y));//CHUJOSTWO NIE DZIALA
-
         createDrawerWithHeaderImage(mNavHeaderImage, x, y);
 
-//        mGridViewVideos = (GridView) findViewById(R.id.main_grid_videos);
-//        mGridViewVideos.setAdapter(new VideoGridAdapter(this));
+
 
         mRecyclerViewArticles = (RecyclerView) findViewById(R.id.main_list_articles);
         mRecyclerViewArticles.setHasFixedSize(true); //more perf if size not changing dynamically
@@ -105,11 +97,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        Spinner spinner = (Spinner) findViewById(R.id.spinner);   //old spinner
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-//                R.array.items, android.R.layout.simple_spinner_item);
-//
-//        spinner.setAdapter(adapter);
     }
 
     private void createDrawerWithHeaderImage(ImageView mNavHeaderImage, int x, int y) {
@@ -130,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 switch(position){
                     case 1:
                         mDrawerLayout.closeDrawers();
-                        i=makeActivityIntent(a.getApplicationContext(),VideoGalleryActivity.class);
+                        i=makeActivityIntent(a.getApplicationContext(),VideoGalleryActivity_.class);
                         a.startActivity(i);
                         break;
                     case 2:

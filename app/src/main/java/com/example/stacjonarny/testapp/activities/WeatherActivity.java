@@ -1,4 +1,4 @@
-package com.example.stacjonarny.testapp;
+package com.example.stacjonarny.testapp.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,13 +29,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.stacjonarny.testapp.AsyncTaskGetWeather;
+import com.example.stacjonarny.testapp.fragments.ForecastFragment;
+import com.example.stacjonarny.testapp.R;
 import com.example.stacjonarny.testapp.Services.WeatherData;
 import com.example.stacjonarny.testapp.Services.WeatherForecast;
+
+import org.androidannotations.annotations.EActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.ExecutionException;
+@EActivity
 
 public class WeatherActivity extends AppCompatActivity {
     private static final String TAG = "ASYNCTASKGETWEATHER";

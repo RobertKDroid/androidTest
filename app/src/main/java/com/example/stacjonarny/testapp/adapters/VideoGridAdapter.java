@@ -1,4 +1,4 @@
-package com.example.stacjonarny.testapp;
+package com.example.stacjonarny.testapp.adapters;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -17,6 +17,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
+
+import com.example.stacjonarny.testapp.R;
 
 /**
  * Created by Stacjonarny on 2016-09-28.
